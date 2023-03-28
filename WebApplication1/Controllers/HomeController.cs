@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Data.Entity;
 
 using WebApplication1.Models;
+using WebApplication1.ViewModels;
 
 namespace WebApplication1.Controllers
 {
@@ -18,9 +19,17 @@ namespace WebApplication1.Controllers
         }
         public ActionResult Index()
         {
-            var upcomingCourses = _dbContext.Course.Include(c => c.Lecturer).Include(c => c.Category).Where(c => c.DateTime > DateTime.Now);
-            return View(upcomingCourses);
+            var upcommingCourses = _dbContext.Course.Include(c => c.Lecturer).Include(c => c.Category).Where(c => c.DateTime > DateTime.Now);
+       
+
+            var viewModel = new CourseViewModel
+            {
+               UpcommingCourses = upcommingCourses,
+               ShowAction = User.Identity.IsAuthenticated
+            };
+            return View(viewModel);
         }
+
 
         public ActionResult About()
         {
